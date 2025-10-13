@@ -2,6 +2,7 @@ import './App.css'
 import Index from './pages/Index'
 import Vote from './pages/Vote'
 import VoteEnd from './pages/VoteEnd'
+import VoteResult from './pages/VoteResult'
 import { Routes, Route } from 'react-router-dom';
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
       <Route path="/home" element={<Index />} />
       <Route path="/vote/:type-president" element={<Vote />} />
       <Route path="/vote/vote-end" element={<VoteEnd />} />
+      <Route path="/vote/result" element={<VoteResult />} />
     </Routes>
     
   )

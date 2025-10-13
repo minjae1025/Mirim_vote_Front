@@ -93,7 +93,7 @@ export default function VoteList({ list }) {
                         <Info>{vote.type === "class" ? `${vote.year}학년도 ${vote.grade}학년 ${vote.class}반` : `${vote.year}학년도`}</Info>
                         <Time>{isStarted ? (isFinished ? `종료 : ${new Date(vote.vote_end).toLocaleString()}` : `남은 시간 : ${Math.floor(vote_time / 60)}시간 ${vote_time % 60}분`) : `시작 예정 : ${vote_time}`}</Time>
                     </Box>
-                    <VoteButton style={button_style} onClick={() => { isFinished ? location.href = `/api/vote/${vote.type}-president?${url_parameters}` : location.href = `vote/${vote.type}-president?${url_parameters}` }}>{button_text}</VoteButton>
+                    <VoteButton style={button_style} onClick={() => { location.href = isFinished? `/vote/result?${url_parameters}` : `/vote/${vote.type}-president?${url_parameters}` }}>{button_text}</VoteButton>
                 </VoteCard>
             );
         });

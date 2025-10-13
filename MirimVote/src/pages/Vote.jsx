@@ -2,6 +2,8 @@ import styled from '@emotion/styled'
 import Background from "../components/Background";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
+import { Button } from "../components/VoteButton";
+import { Title, SubTitle } from "../components/VoteTitles";
 import { Page, Main } from "../components/Page";
 import { useState, useEffect } from "react";
 
@@ -64,44 +66,11 @@ const SelectedInfo = styled.div`
   margin-bottom: 24px;
 `;
 
-const Button = styled.button`
-  display: block;
-  margin: 0 auto;
-  background: #288157;
-  color: #fff;
-  font-size: 28px;
-  font-weight: 400;
-  border: none;
-  border-radius: 12px;
-  padding: 12px 64px;
-  cursor: pointer;
-  transition: background 0.2s;
-  margin-bottom: 40px;
-  &:hover {
-    background: #35603f;
-  }
-`;
-
-const Title = styled.p`
-  text-align: center;
-  font-size: 42px;
-  font-weight: 600;
-  margin: 32px 0 8px;
-  color: #222;
-`;
-
-const SubTitle = styled.p`
-  text-align: center;
-  font-size: 20px;
-  font-weight: 400;
-  margin: 16px 0;
-  color: #444;
-`;
-
 const url = new URL(window.location.href);
 const urlParams = url.searchParams;
 const year = urlParams.get('year');
 const type = urlParams.get('type');
+console.log(urlParams);
 
 export default function Vote() {
     const [selected, setSelected] = useState(null);
@@ -196,10 +165,10 @@ function handleSubmit(selected) {
         body.semester = urlParams.get('semester');
     }
 
-    window.location.href = "/vote/vote-end";
+    window.location.href = "/vote/vote-end"+window.location.search;
 
     //이 아래코드는 실제로 연동할때 사용할 코드
-    
+
     // fetch('https://api.example.com/submit-vote', {
     //     method: 'POST',
     //     headers: {
@@ -208,7 +177,7 @@ function handleSubmit(selected) {
     //     body: JSON.stringify({ body }),
     // }).then(res => {
     //   if(res.ok) {
-    //     window.location.href = "/vote/vote-end";
+    //     window.location.href = "/vote/vote-end"+window.location.search;
     //   }
     // }).catch(err => {
     //   alert("오류가 발생했습니다. 다시 시도해주세요.")
