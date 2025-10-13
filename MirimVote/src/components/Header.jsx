@@ -1,16 +1,64 @@
-import './Header.css'
+import styled from '@emotion/styled'
 import reactLogo from '../assets/react.svg'
 
+const HeaderWrap = styled.header`
+    height: 120px;
+    background: #288157;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 40px;
+    box-sizing: border-box;
+    position: relative;
+`
+
+const Left = styled.div`
+    width: 100px;
+    height: 40px;
+    background: #F9F9F9;
+    border-radius: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+`
+
+const Title = styled.div`
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    color: white;
+    font-size: 28px;
+    font-weight: 600;
+`
+
+const Right = styled.div`
+    width: 85px;
+    height: 85px;
+    background: transparent;
+    border-radius: 85px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    & img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+`
+
 export default function Header() {
-    return (
-        <header className="header">
-            <div className="header_left">
-                <p>학생</p>
-            </div>
-            <div className="header_title">Mirim Vote</div>
-            <div className="header_right">
-                <img src={reactLogo} alt="Profile" />
-            </div>
-        </header>
-    )
+        return (
+                <HeaderWrap>
+                        <Left>
+                                <p>학생</p>
+                        </Left>
+                        <Title>Mirim Vote</Title>
+                        <Right>
+                                <img src={reactLogo} alt="Profile" />
+                        </Right>
+                </HeaderWrap>
+        )
 }
