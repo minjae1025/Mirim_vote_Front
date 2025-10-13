@@ -1,8 +1,8 @@
 import styled from '@emotion/styled'
-import reactLogo from '../assets/react.svg'
+import reactLogo from '../assets/user_icon1.jpg'
 
 const HeaderWrap = styled.header`
-    height: 120px;
+    height: 95px;
     background: #288157;
     display: flex;
     align-items: center;
@@ -18,6 +18,8 @@ const Left = styled.div`
     background: #F9F9F9;
     border-radius: 30px;
     display: flex;
+    font-size: 24px;
+    font-weight: 500;
     align-items: center;
     justify-content: center;
 `
@@ -27,13 +29,13 @@ const Title = styled.div`
     left: 50%;
     transform: translateX(-50%);
     color: white;
-    font-size: 28px;
+    font-size: 60px;
     font-weight: 600;
 `
 
 const Right = styled.div`
-    width: 85px;
-    height: 85px;
+    width: 65px;
+    height: 65px;
     background: transparent;
     border-radius: 85px;
     overflow: hidden;

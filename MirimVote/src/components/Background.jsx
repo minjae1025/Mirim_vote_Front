@@ -4,7 +4,6 @@ const Background = () => (
   <Global
     styles={css`
       body {
-        font-family: 'Noto Sans KR', sans-serif;
         background: #E6FFEA;
       }
 
