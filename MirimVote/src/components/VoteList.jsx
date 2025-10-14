@@ -6,25 +6,26 @@ const Container = styled.div`
 
 const Label = styled.p`
     color: #222;
-    font-size: 36px;
+    font-size: 32px;
     font-weight: 600;
     margin: 0;
+    margin-top: 20px;
 `
 
 const VoteCard = styled.div`
     display: inline-block;
     width: 450px;
-    height: 180px;
+    height: 150px;
     background-color: #f9f9f9;
     border: 1px solid #ddd;
-    border-radius: 8px;
+    border-radius: 10px;
     margin: 10px 20px 10px 0px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 `
 
 const Title = styled.p`
     margin: 0;
-    font-size: 36px;
+    font-size: 28px;
     font-weight: 600;
     color: #333;
 `
@@ -37,7 +38,7 @@ const Info = styled.p`
 `
 
 const Time = styled.p`
-    font-size: 16px;
+    font-size: 14px;
     color: #444;
     text-align: right;
     margin: 14px 0px 0px 0px;
@@ -47,17 +48,17 @@ const VoteButton = styled.button`
     background-color: #288157;
     color: white;
     border: none;
-    border-radius: 0px 0px 8px 8px;
+    border-radius: 0px 0px 10px 10px;
     width: 100%;
-    height: 60px;
-    font-size: 16px;
+    height: 46px;
+    font-size: 20px;
     cursor: pointer;
 `
 
 const Box = styled.div`
     display: flex;
     flex-direction: column;
-    padding: 10px;
+    padding: 8px;
 `
 
 export default function VoteList({ list }) {
