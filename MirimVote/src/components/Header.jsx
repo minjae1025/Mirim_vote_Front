@@ -58,20 +58,18 @@ export default function Header() {
     const [status, setStatus] = useState(false);
     const avatarRef = useRef(null)
 
-    
-
-        return (
-                <HeaderWrap>
-                        <Left>
-                                <p>학생</p>
-                        </Left>
-                        <Title>Mirim Vote</Title>
+    return (
+        <HeaderWrap>
+            <Left>
+                <p>학생</p>
+            </Left>
+            <Title><a href="/" style={{ color: 'white', textDecoration: 'none' }}>Mirim Vote</a></Title>
             <Right>
-                <button ref={avatarRef} onClick={() => setStatus(v => !v)} aria-expanded={status} style={{border:0, background:'transparent', padding:0}}>
+                <button ref={avatarRef} onClick={() => setStatus(v => !v)} aria-expanded={status} style={{ border: 0, background: 'transparent', padding: 0 }}>
                     <img src={reactLogo} alt="Profile" />
                 </button>
                 <ProfileMenu open={status} onClose={() => setStatus(false)} anchorRef={avatarRef} profile={{ avatar: reactLogo, email: 's2455@e-mirim.hs.kr', meta: '2학년 4반 김민재' }} />
             </Right>
-                </HeaderWrap>
-        )
+        </HeaderWrap>
+    )
 }

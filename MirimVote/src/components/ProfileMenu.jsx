@@ -66,6 +66,7 @@ const ItemText = styled.span`
 `
 
 export default function ProfileMenu({ open, onClose, anchorRef, profile }) {
+
   const elRef = useRef(null)
   const navigate = useNavigate()
 

@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
-import { useNavigate } from 'react-router-dom'
+import BackButtonText from "../assets/BackButtonText.png";
 
 const Page = styled.div`
   min-height: 100vh;
@@ -23,21 +23,21 @@ const Card = styled.div`
   background: #fafafa;
   border-radius: 20px;
   box-shadow: 0 8px 22px rgba(0,0,0,0.08);
-  border: 1px solid rgba(0,0,0,0.06);
+  border: 1px solid #288157;
 `
 
 const BackButton = styled.button`
   background: transparent;
+  width: 150px;
+  height: 50px;
   border: 1px solid #288157;
+  border-width: 0 1px 1px 0;
   color: #0b472f;
-  padding: 6px 12px;
-  border-radius: 20px 0;
+  border-radius: 19px 0;
   cursor: pointer;
-  margin-bottom: 20px;
 `
 
 const ButtonContainer = styled.div`
-  posiotion: absolute;
   align-items: left;
   padding-left: 0px;
   
@@ -46,7 +46,7 @@ const ButtonContainer = styled.div`
 const Title = styled.h2`
   text-align: center;
   font-size: 32px;
-  margin: 6px 0 24px;
+  margin: 0;
 `
 
 const Label = styled.label`
@@ -79,19 +79,17 @@ const BodyContent = styled.div`
 `
 
 export default function MyPage() {
-  const navigate = useNavigate()
   return (
     <Page>
       <Header />
       <Main>
         <Card>
           <ButtonContainer>
-            <BackButton onClick={() => navigate(-1)}>← 대시보드</BackButton>
+            <BackButton onClick={() => window.location.href = '/dashboard'}><img src={BackButtonText} alt="Back" width="66%"/></BackButton>
           </ButtonContainer>
-          {/* <BackButton onClick={() => navigate(-1)}>← 대시보드</BackButton> */}
+          <Title>이민준님의 기본 정보</Title>
           <BodyContent>
-            <Title>이민준님의 기본 정보</Title>
-
+            
             <Label>이름</Label>
             <Input>이민준</Input>
 
