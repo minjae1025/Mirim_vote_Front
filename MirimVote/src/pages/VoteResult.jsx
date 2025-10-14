@@ -16,7 +16,6 @@ const TopBox = styled.div`
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    align-items: center;
 `;
 
 const BackButton = styled.button`
@@ -25,6 +24,7 @@ const BackButton = styled.button`
     width: 150px;
     height: 45px;
     border: 1px solid #888;
+    background: #f9f9f9;
     border-radius: 10px;
     cursor: pointer;
 `;
@@ -174,7 +174,7 @@ export default function VoteResult(info = null) {
                 <Background />
                 <TopBox>
                     <BackButton>
-                        <img src={BackButtonText} alt="Back" width="66%" onClick={() => window.history.back()} />
+                        <img src={BackButtonText} alt="Back" width="66%" onClick={() => window.location.href = '/dashboard'} />
                     </BackButton>
                     <Title style={{ width: "70%" }}>투표 상황 및 결과</Title>
                 </TopBox>

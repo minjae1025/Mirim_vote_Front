@@ -1,6 +1,6 @@
+import styled from '@emotion/styled';
 import Background from "../components/Background";
 import Footer from "../components/Footer";
-import Header from "../components/Header";
 
 const Page = styled.div`
   min-height: 100vh;
@@ -11,7 +11,6 @@ const Page = styled.div`
 
 const Main = styled.main`
   flex: 1 0 auto;
-  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;

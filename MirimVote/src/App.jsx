@@ -1,6 +1,5 @@
 import './App.css'
 import Index from './pages/Index'
-
 import Dashboard from './pages/Dashboard'
 import Vote from './pages/Vote'
 import VoteEnd from './pages/VoteEnd'
