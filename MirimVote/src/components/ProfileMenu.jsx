@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { createPortal } from 'react-dom'
 import styled from '@emotion/styled'
 
@@ -66,6 +67,7 @@ const ItemText = styled.span`
 
 export default function ProfileMenu({ open, onClose, anchorRef, profile }) {
   const elRef = useRef(null)
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (!open) return
@@ -100,8 +102,8 @@ export default function ProfileMenu({ open, onClose, anchorRef, profile }) {
         <div style={{ color: '#444', marginBottom: 8, fontSize: 18, fontWeight: 400}}>{profile?.meta || '2학년 4반 김민재'}</div>
         <Line />
         <Item role="menuitem"><ItemText>투표 상황</ItemText></Item>
-        <Line />
-        <Item role="menuitem"><ItemText>마이페이지</ItemText></Item>
+  <Line />
+  <Item role="menuitem" onClick={() => { onClose(); navigate('/mypage') }}><ItemText>마이페이지</ItemText></Item>
         <Line />
         <Item role="menuitem"><ItemText>로그아웃</ItemText></Item>
       </Card>
