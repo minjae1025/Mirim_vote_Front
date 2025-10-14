@@ -4,7 +4,7 @@ import { useState, useRef } from 'react';
 import ProfileMenu from './ProfileMenu'
 
 const HeaderWrap = styled.header`
-    height: 95px;
+    height: 85px;
     background: #288157;
     display: flex;
     align-items: center;
@@ -31,7 +31,7 @@ const Title = styled.div`
     left: 50%;
     transform: translateX(-50%);
     color: white;
-    font-size: 60px;
+    font-size: 50px;
     font-weight: 600;
 `
 
