@@ -56,7 +56,18 @@ const Right = styled.div`
 export default function Header() {
 
     const [status, setStatus] = useState(false);
-    const avatarRef = useRef(null)
+    const avatarRef = useRef(null);
+    // const request = indexedDB.open("firebase", 2);
+    // var memoObjectStore = db.transaction("memo").objectStore("memo");
+
+    // request.onupgradeneeded = (event) => {
+    //     const db = event.target.result;
+    //     db.createObjectStore("firebase", { keyPath: "fbase_key" });
+    // };
+
+    // request.onsuccess = e => {
+    //     alert(`uid: ${request.result.uid}`);
+    // };
 
     return (
         <HeaderWrap>

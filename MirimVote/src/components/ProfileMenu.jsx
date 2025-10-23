@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { createPortal } from 'react-dom'
 import styled from '@emotion/styled'
+import { auth } from '../services/firebase.js';
 
 const Backdrop = styled.div`
   position: fixed;
@@ -100,7 +101,7 @@ export default function ProfileMenu({ open, onClose, anchorRef, profile }) {
         <Title>내 정보</Title>
         <Avatar src={profile?.avatar || '/src/assets/react.svg'} alt="avatar" />
         <Email>{profile?.email || 's2455@e-mirim.hs.kr'}</Email>
-        <div style={{ color: '#444', marginBottom: 8, fontSize: 18, fontWeight: 400}}>{profile?.meta || '2학년 4반 김민재'}</div>
+        <div style={{ color: 'rgb(44, 44, 44)', marginBottom: 8, fontSize: 18, fontWeight: 400}}>{profile?.meta || '2학년 4반 김민재'}</div>
         <Line />
         <Item role="menuitem"><ItemText>투표 상황</ItemText></Item>
   <Line />
