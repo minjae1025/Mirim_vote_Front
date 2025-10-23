@@ -5,6 +5,7 @@ import Vote from './pages/Vote'
 import VoteEnd from './pages/VoteEnd'
 import VoteResult from './pages/VoteResult'
 import MyPage from './pages/MyPage'
+import VoteManagement from './pages/VoteManagement'
 import { Routes, Route } from 'react-router-dom';
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
       <Route path="/vote/vote-end" element={<VoteEnd />} />
       <Route path="/vote/result" element={<VoteResult />} />
       <Route path="/mypage" element={<MyPage />} />
+      <Route path="/vote/managers" element={<VoteManagement />} />
     </Routes>
   )
 }

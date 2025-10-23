@@ -70,7 +70,7 @@ const url = new URL(window.location.href);
 const urlParams = url.searchParams;
 const year = urlParams.get('year');
 const type = urlParams.get('type');
-console.log(urlParams);
+// console.log(urlParams);
 
 export default function Vote() {
     const [selected, setSelected] = useState(null);
