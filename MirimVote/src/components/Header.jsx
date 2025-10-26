@@ -2,6 +2,9 @@ import styled from '@emotion/styled'
 import reactLogo from '../assets/user_icon1.jpg'
 import { useState, useRef } from 'react';
 import ProfileMenu from './ProfileMenu'
+import { auth, getUser, provider } from '../services/firebase.js';
+import { onAuthStateChanged, signOut } from "firebase/auth";
+
 
 const HeaderWrap = styled.header`
     height: 85px;
@@ -57,22 +60,25 @@ export default function Header() {
 
     const [status, setStatus] = useState(false);
     const avatarRef = useRef(null);
-    // const request = indexedDB.open("firebase", 2);
-    // var memoObjectStore = db.transaction("memo").objectStore("memo");
+    let data = {};
 
-    // request.onupgradeneeded = (event) => {
-    //     const db = event.target.result;
-    //     db.createObjectStore("firebase", { keyPath: "fbase_key" });
-    // };
-
-    // request.onsuccess = e => {
-    //     alert(`uid: ${request.result.uid}`);
-    // };
+    onAuthStateChanged(auth, async (user) => {
+        if (user) {
+            // User is signed in, see docs for a list of available properties
+            // https://firebase.google.com/docs/reference/js/auth.user
+            const uid = user.uid;
+            data = await getUser(uid);
+            console.log("Logged in user data:", data);
+            // ...
+        } else {
+            window.location.href = "/";
+        }
+    });
 
     return (
         <HeaderWrap>
             <Left>
-                <p>학생</p>
+                <p>{data.type}</p>
             </Left>
             <Title><a href="/" style={{ color: 'white', textDecoration: 'none' }}>Mirim Vote</a></Title>
             <Right>
@@ -84,3 +90,8 @@ export default function Header() {
         </HeaderWrap>
     )
 }
+
+
+// 민바오 !! 
+// 에러난다 ㅎㅎㅎ!!!!
+// 헉쓰 

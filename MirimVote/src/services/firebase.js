@@ -21,7 +21,6 @@ function getUser(uid) {
     })
     .then(response => response.json())
     .then(data => {
-        console.log('User data:', data);
         return data;
     })
     .catch((error) => {

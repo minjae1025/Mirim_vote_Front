@@ -87,7 +87,7 @@ function loginWithGoogle() {
         fetch('http://localhost:3000/auth/google/', { // 추후 준성 백엔드 URL로 변경
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'ap3plication/json',
           },
           body: JSON.stringify({ token: idToken }),
         })
