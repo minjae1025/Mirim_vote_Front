@@ -1,4 +1,5 @@
-import styled from '@emotion/styled'
+import styled from '@emotion/styled';
+import { auth, getUser, provider, logout } from '../services/firebase.js';
 
 const Container = styled.div`
     margin: 20px;

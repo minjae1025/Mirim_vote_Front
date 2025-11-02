@@ -2,6 +2,7 @@ import styled from '@emotion/styled'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import BackButtonText from "../assets/BackButtonText.png";
+import { auth, getUser } from '../services/firebase.js';
 
 const Page = styled.div`
   min-height: 100vh;
@@ -79,37 +80,59 @@ const BodyContent = styled.div`
 `
 
 export default function MyPage() {
-  return (
-    <Page>
-      <Header />
-      <Main>
-        <Card>
-          <ButtonContainer>
-            <BackButton onClick={() => window.location.href = '/dashboard'}><img src={BackButtonText} alt="Back" width="66%"/></BackButton>
-          </ButtonContainer>
-          <Title>이민준님의 기본 정보</Title>
-          <BodyContent>
-            
-            <Label>이름</Label>
-            <Input>이민준</Input>
+    const [status, setStatus] = useState(false);
+    const [loading, setLoading] = useState(true);
+    const avatarRef = useRef(null);
 
-            <Label>이메일</Label>
-            <Input>s2409@e-mirim.hs.kr</Input>
+    useEffect(() => {
+        onAuthStateChanged(auth, async (user) => {
+            // console.log('Auth state changed:', user);
+            if (user) {
+                const uid = user.uid;
+                const fetchedData = await getUser(uid);
+                setUserData(fetchedData.user);
+                setLoading(false);
+            } else {
+                console.log('redirecting to /');
+                window.location.href = '/';
+            }
+        });
+    }, [])
 
-            <Row>
-              <Half>
-                <Label>학년</Label>
-                <Input>2학년</Input>
-              </Half>
-              <Half>
-                <Label>반</Label>
-                <Input>4반</Input>
-              </Half>
-            </Row>
-          </BodyContent>
-        </Card>
-      </Main>
-      <Footer />
-    </Page>
-  )
+
+
+    if (loading) return null;
+    return (
+        <Page>
+            <Header />
+            <Main>
+                <Card>
+                    <ButtonContainer>
+                        <BackButton onClick={() => window.location.href = '/dashboard'}><img src={BackButtonText} alt="Back" width="66%" /></BackButton>
+                    </ButtonContainer>
+                    <Title>이민준님의 기본 정보</Title>
+                    <BodyContent>
+
+                        <Label>이름</Label>
+                        <Input>이민준</Input>
+
+                        <Label>이메일</Label>
+                        <Input>s2409@e-mirim.hs.kr</Input>
+
+                        <Row>
+                            <Half>
+                                <Label>학년</Label>
+                                <Input>2학년</Input>
+                            </Half>
+                            <Half>
+                                <Label>반</Label>
+                                <Input>4반</Input>
+                            </Half>
+                        </Row>
+                    </BodyContent>
+                </Card>
+            </Main>
+            <Footer />
+        </Page>
+    )
 }

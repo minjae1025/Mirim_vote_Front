@@ -1,9 +1,9 @@
 import styled from '@emotion/styled'
 import reactLogo from '../assets/user_icon1.jpg'
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import ProfileMenu from './ProfileMenu'
-import { auth, getUser, provider } from '../services/firebase.js';
-import { onAuthStateChanged, signOut } from "firebase/auth";
+import { auth, getUser } from '../services/firebase.js';
+import { onAuthStateChanged } from "firebase/auth";
 
 
 const HeaderWrap = styled.header`
@@ -57,41 +57,48 @@ const Right = styled.div`
 `
 
 export default function Header() {
-
+    const [userData, setUserData] = useState(null);
     const [status, setStatus] = useState(false);
+    const [loading, setLoading] = useState(true);
     const avatarRef = useRef(null);
-    let data = {};
 
-    onAuthStateChanged(auth, async (user) => {
-        if (user) {
-            // User is signed in, see docs for a list of available properties
-            // https://firebase.google.com/docs/reference/js/auth.user
-            const uid = user.uid;
-            data = await getUser(uid);
-            console.log("Logged in user data:", data);
-            // ...
-        } else {
-            window.location.href = "/";
-        }
-    });
+    useEffect(() => {
+        onAuthStateChanged(auth, async (user) => {
+            // console.log('Auth state changed:', user);
+            if (user) {
+                const uid = user.uid;
+                const fetchedData = await getUser(uid);
+                setUserData(fetchedData.user);
+                setLoading(false);
+            } else {
+                console.log('redirecting to /');
+                window.location.href = '/';
+            }
+        });
+    }, [])
 
+    
+    
+    if (loading) return null; // 초기 렌더링 없이 대기
+
+    console.log(userData);
     return (
         <HeaderWrap>
             <Left>
-                <p>{data.type}</p>
+                <p>{userData.type == 'teacher' ? "선생님" : "학생"}</p>
             </Left>
             <Title><a href="/" style={{ color: 'white', textDecoration: 'none' }}>Mirim Vote</a></Title>
             <Right>
                 <button ref={avatarRef} onClick={() => setStatus(v => !v)} aria-expanded={status} style={{ border: 0, background: 'transparent', padding: 0 }}>
-                    <img src={reactLogo} alt="Profile" />
+                    <img src={userData.photoURL} alt="Profile" />
                 </button>
-                <ProfileMenu open={status} onClose={() => setStatus(false)} anchorRef={avatarRef} profile={{ avatar: reactLogo, email: 's2455@e-mirim.hs.kr', meta: '2학년 4반 김민재' }} />
+                <ProfileMenu open={status} onClose={() => setStatus(false)} anchorRef={avatarRef} profile={{ avatar: userData.photoURL, email: userData.email, meta: userData.displayName }} />
             </Right>
         </HeaderWrap>
     )
 }
 
 
-// 민바오 !! 
+// 민바오 !!
 // 에러난다 ㅎㅎㅎ!!!!
 // 헉쓰 
