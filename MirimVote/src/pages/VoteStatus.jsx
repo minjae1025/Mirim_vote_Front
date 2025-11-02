@@ -16,6 +16,7 @@ const TopBox = styled.div`
     flex-direction: row;
     align-items: center;
     justify-content: center;
+    margin-bottom: 20px;
 `;
 
 const BackButton = styled.button`
@@ -25,6 +26,7 @@ const BackButton = styled.button`
     height: 45px;
     border: 1px solid #888;
     background: #f9f9f9;
+    margin-top: 20px;
     border-radius: 10px;
     cursor: pointer;
 `;
@@ -144,45 +146,63 @@ const CandidateInfo = styled.div`
 
 export default function VoteResult(info = null) {
     // 예시 데이터
-    const totalVotes = 17;
-    const totalVoters = 17;
-    const percent = Math.round((totalVotes / totalVoters) * 100);
-    const status = "종료";
-    const candidates = [
+    const list = [
         {
-            number: 1,
-            names: "김민재",
-            votes: 4,
+            totalVoters: 17,
+            totalVotes: 17,
+            status: "종료",
+            candidates: [
+                {
+                    number: 1,
+                    names: "김민재",
+                    votes: 4,
+                },
+                {
+                    number: 2,
+                    names: "육준성",
+                    votes: 10,
+                },
+                {
+                    number: 3,
+                    names: "이민준",
+                    votes: 3,
+                }
+            ]
         },
         {
-            number: 2,
-            names: "육준성",
-            votes: 10,
-        },
-        {
-            number: 3,
-            names: "이민준",
-            votes: 3,
+            totalVoters: 17,
+            totalVotes: 17,
+            status: "종료",
+            candidates: [
+                {
+                    number: 1,
+                    names: "김민재",
+                    votes: 4,
+                },
+                {
+                    number: 2,
+                    names: "육준성",
+                    votes: 10,
+                },
+                {
+                    number: 3,
+                    names: "이민준",
+                    votes: 3,
+                }
+            ]
         }
     ];
-    const candidatePercents = candidates.map(c => totalVotes === 0 ? 0 : Math.round((c.votes / totalVotes) * 100));
 
-    return (
-        <Page>
-            <Header />
-            <Main>
-                <Background />
-                <TopBox>
-                    <BackButton>
-                        <img src={BackButtonText} alt="Back" width="66%" onClick={() => window.location.href = '/dashboard'} />
-                    </BackButton>
-                    <Title style={{ width: "70%" }}>투표 상황 및 결과</Title>
-                </TopBox>
-                <States>
+    const renderVotes = () => {
+        return list.map((data, index) => {
+            const percent = Math.round((data.totalVotes / data.totalVoters) * 100);
+            const candidatePercents = data.candidates.map(c => data.totalVotes === 0 ? 0 : Math.round((c.votes / data.totalVotes) * 100));
+            return (
+                <States key={index}>
                     <StatusBox>
                         <StatusGrid>
                             <StatusItem>
-                                <StatusNum>{totalVotes}<span style={{ fontSize: "20px", fontWeight: "400" }}>/{totalVoters}</span></StatusNum>
+                                <StatusNum>{data.totalVotes}<span style={{ fontSize: "20px", fontWeight: "400" }}>/{data.totalVoters}</span></StatusNum>
                                 <StatusLabel>투표수</StatusLabel>
                             </StatusItem>
                             <StatusItem>
@@ -190,12 +210,12 @@ export default function VoteResult(info = null) {
                                 <StatusLabel>투표율</StatusLabel>
                             </StatusItem>
                             <StatusItem>
-                                <StatusNum>{status}</StatusNum>
+                                <StatusNum>{data.status}</StatusNum>
                                 <StatusLabel>상태</StatusLabel>
                             </StatusItem>
                         </StatusGrid>
                         <CandidateList>
-                            {candidates.map((c, idx) => (
+                            {data.candidates.map((c, idx) => (
                                 <CandidateRow key={c.number}>
                                     <CandidateInfo>
                                         <CandidateName>{c.number}. {c.names}</CandidateName>
@@ -211,6 +231,22 @@ export default function VoteResult(info = null) {
                         </CandidateList>
                     </StatusBox>
                 </States>
+            );
+        });
+    };
+
+    return (
+        <Page>
+            <Header />
+            <Main>
+                <Background />
+                <TopBox>
+                    <BackButton>
+                        <img src={BackButtonText} alt="Back" width="66%" onClick={() => window.location.href = '/dashboard'} />
+                    </BackButton>
+                    <Title style={{ width: "70%" }}>투표 상황 및 결과</Title>
+                </TopBox>
+                {renderVotes()}
             </Main>
             <Footer />
         </Page>

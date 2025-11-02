@@ -2,7 +2,6 @@ import { useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { createPortal } from 'react-dom'
 import styled from '@emotion/styled'
-import { signOut } from 'firebase/auth'
 import { auth, logout } from '../services/firebase.js';
 
 const Backdrop = styled.div`
@@ -75,50 +74,51 @@ const InfoName = styled.p`
 `
 
 export default function ProfileMenu({ open, onClose, anchorRef, profile }) {
+    // console.log(profile);
 
-  const elRef = useRef(null)
-  const navigate = useNavigate()
+    const elRef = useRef(null)
+    const navigate = useNavigate()
 
-  useEffect(() => {
-    if (!open) return
-    function onKey(e) {
-      if (e.key === 'Escape') onClose()
-    }
-    function onMouseDown(e) {
-      if (!elRef.current) return
-      if (elRef.current.contains(e.target)) return
-      if (anchorRef && anchorRef.current && anchorRef.current.contains(e.target)) return
-      onClose()
-    }
-    document.addEventListener('keydown', onKey)
-    document.addEventListener('mousedown', onMouseDown)
-    return () => {
-      document.removeEventListener('keydown', onKey)
-      document.removeEventListener('mousedown', onMouseDown)
-    }
-  }, [open, onClose, anchorRef])
+    useEffect(() => {
+        if (!open) return
+        function onKey(e) {
+            if (e.key === 'Escape') onClose()
+        }
+        function onMouseDown(e) {
+            if (!elRef.current) return
+            if (elRef.current.contains(e.target)) return
+            if (anchorRef && anchorRef.current && anchorRef.current.contains(e.target)) return
+            onClose()
+        }
+        document.addEventListener('keydown', onKey)
+        document.addEventListener('mousedown', onMouseDown)
+        return () => {
+            document.removeEventListener('keydown', onKey)
+            document.removeEventListener('mousedown', onMouseDown)
+        }
+    }, [open, onClose, anchorRef])
 
-  if (!open) return null
+    if (!open) return null
 
-  const rect = anchorRef?.current?.getBoundingClientRect?.()
-  const style = rect ? { top: rect.bottom + 20 + window.scrollY, right: 5 } : {}
+    const rect = anchorRef?.current?.getBoundingClientRect?.()
+    const style = rect ? { top: rect.bottom + 20 + window.scrollY, right: 5 } : {}
 
 
-  return createPortal(
-    <Backdrop aria-hidden>
-      <Card ref={elRef} style={style} role="menu" aria-label="프로필 메뉴">
-        <Title>내 정보</Title>
-        <Avatar src={profile?.avatar || '/src/assets/react.svg'} alt="avatar" />
-        <InfoEmail>{profile?.email || '로그인 해주세요.'}</InfoEmail>
-        <InfoName>{profile?.meta || '로그인 해주세요.'}</InfoName>
-        <Line />
-        <Item role="menuitem"><ItemText>투표 상황</ItemText></Item>
-        <Line />
-        <Item role="menuitem" onClick={() => { onClose(); navigate('/mypage') }}><ItemText>마이페이지</ItemText></Item>
-        <Line />
-        <Item role="menuitem" onClick={() => { logout(auth) }}><ItemText>로그아웃</ItemText></Item>
-      </Card>
-    </Backdrop>,
-    document.getElementById('root')
-  )
+    return createPortal(
+        <Backdrop aria-hidden>
+            <Card ref={elRef} style={style} role="menu" aria-label="프로필 메뉴">
+                <Title>내 정보</Title>
+                <Avatar src={profile?.photoURL || '/src/assets/react.svg'} alt="avatar" />
+                <InfoEmail>{profile?.email || '로그인 해주세요.'}</InfoEmail>
+                <InfoName>{profile?.name || '로그인 해주세요.'}</InfoName>
+                <Line />
+                <Item role="menuitem" onClick={() => { window.location.href = "/vote/status" }}><ItemText>{"투표 상황"}</ItemText></Item>
+                <Line />
+                <Item role="menuitem" onClick={() => { onClose(); navigate('/mypage') }}><ItemText>마이페이지</ItemText></Item>
+                <Line />
+                <Item role="menuitem" onClick={() => { logout(auth) }}><ItemText>로그아웃</ItemText></Item>
+            </Card>
+        </Backdrop>,
+        document.getElementById('root')
+    )
 }

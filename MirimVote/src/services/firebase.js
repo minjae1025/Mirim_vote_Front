@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider, onAuthStateChanged, signOut  } from "firebase/auth";
+import { getAuth, GoogleAuthProvider, onAuthStateChanged, signOut } from "firebase/auth";
 import firebaseConfig from "../firebaseConfig.json";
 
 const app = initializeApp(firebaseConfig);
@@ -20,7 +20,17 @@ async function getUser(uid) {
             },
             body: JSON.stringify({ uid: uid })
         });
-        const data = await response.json();
+        const data = await response.json()
+        const displayName = data.user.displayName.split('_');
+        if (displayName.length == 1) {
+            data.user.name = displayName[0];
+        }
+        else {
+            data.user.grade = displayName[0].split("")[0];
+            data.user.class = displayName[0].split("")[1];
+            data.user.name = displayName[1];
+        }
+
         return data;
     } catch (error) {
         console.error('Error:', error);

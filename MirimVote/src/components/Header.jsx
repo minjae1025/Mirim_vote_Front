@@ -61,38 +61,43 @@ export default function Header() {
     const [status, setStatus] = useState(false);
     const [loading, setLoading] = useState(true);
     const avatarRef = useRef(null);
+    const initialAuthCheckDone = useRef(false);
 
     useEffect(() => {
-        onAuthStateChanged(auth, async (user) => {
-            // console.log('Auth state changed:', user);
-            if (user) {
-                const uid = user.uid;
-                const fetchedData = await getUser(uid);
-                setUserData(fetchedData.user);
-                setLoading(false);
-            } else {
-                console.log('redirecting to /');
-                window.location.href = '/';
-            }
-        });
+        if (initialAuthCheckDone.current) return;
+        
+        const unsubscribe = onAuthStateChanged(auth, async (user) => {
+                if (user) {
+                    const uid = user.uid;
+                    const fetchedData = await getUser(uid);
+                    setUserData(fetchedData.user);
+                    setLoading(false);
+                    initialAuthCheckDone.current = true;
+                } else {
+                    console.log('redirecting to /');
+                    window.location.href = '/';
+                }
+            });
+
+        return () => unsubscribe();
     }, [])
 
     
     
     if (loading) return null; // 초기 렌더링 없이 대기
 
-    console.log(userData);
+    // console.log(userData);
     return (
         <HeaderWrap>
             <Left>
                 <p>{userData.type == 'teacher' ? "선생님" : "학생"}</p>
             </Left>
-            <Title><a href="/" style={{ color: 'white', textDecoration: 'none' }}>Mirim Vote</a></Title>
+            <Title><a href="/dashboard" style={{ color: 'white', textDecoration: 'none' }}>Mirim Vote</a></Title>
             <Right>
                 <button ref={avatarRef} onClick={() => setStatus(v => !v)} aria-expanded={status} style={{ border: 0, background: 'transparent', padding: 0 }}>
                     <img src={userData.photoURL} alt="Profile" />
                 </button>
-                <ProfileMenu open={status} onClose={() => setStatus(false)} anchorRef={avatarRef} profile={{ avatar: userData.photoURL, email: userData.email, meta: userData.displayName }} />
+                <ProfileMenu open={status} onClose={() => setStatus(false)} anchorRef={avatarRef} profile={ userData } />
             </Right>
         </HeaderWrap>
     )

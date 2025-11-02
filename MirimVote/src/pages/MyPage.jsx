@@ -3,6 +3,8 @@ import Header from '../components/Header'
 import Footer from '../components/Footer'
 import BackButtonText from "../assets/BackButtonText.png";
 import { auth, getUser } from '../services/firebase.js';
+import { useState, useEffect } from 'react';
+import { onAuthStateChanged } from "firebase/auth";
 
 const Page = styled.div`
   min-height: 100vh;
@@ -80,9 +82,8 @@ const BodyContent = styled.div`
 `
 
 export default function MyPage() {
-    const [status, setStatus] = useState(false);
+    const [userData, setUserData] = useState(null);
     const [loading, setLoading] = useState(true);
-    const avatarRef = useRef(null);
 
     useEffect(() => {
         onAuthStateChanged(auth, async (user) => {
@@ -102,6 +103,7 @@ export default function MyPage() {
 
 
     if (loading) return null;
+
     return (
         <Page>
             <Header />
@@ -110,25 +112,26 @@ export default function MyPage() {
                     <ButtonContainer>
                         <BackButton onClick={() => window.location.href = '/dashboard'}><img src={BackButtonText} alt="Back" width="66%" /></BackButton>
                     </ButtonContainer>
-                    <Title>이민준님의 기본 정보</Title>
+                    <Title>{userData.name}님의 기본 정보</Title>
                     <BodyContent>
 
                         <Label>이름</Label>
-                        <Input>이민준</Input>
+                        <Input>{userData.name}</Input>
 
                         <Label>이메일</Label>
-                        <Input>s2409@e-mirim.hs.kr</Input>
+                        <Input>{userData.email}</Input>
 
-                        <Row>
+                        {userData.type == 'student' ? <Row>
                             <Half>
                                 <Label>학년</Label>
-                                <Input>2학년</Input>
+                                <Input>{userData.grade}학년</Input>
                             </Half>
                             <Half>
                                 <Label>반</Label>
-                                <Input>4반</Input>
+                                <Input>{userData.class}반</Input>
                             </Half>
-                        </Row>
+                        </Row> : null }
+
                     </BodyContent>
                 </Card>
             </Main>
