@@ -5,11 +5,12 @@ import Header from "../components/Header";
 import { Page, Main } from "../components/Page";
 import { Title } from "../components/VoteTitles";
 import BackButtonText from "../assets/BackButtonText.png";
+import { useState, useEffect } from 'react';
+import { auth, getUser } from '../services/firebase.js';
+import { onAuthStateChanged } from "firebase/auth";
 
 const url = new URL(window.location.href);
 const urlParams = url.searchParams;
-const year = urlParams.get('year');
-const type = urlParams.get('type');
 
 const TopBox = styled.div`
     display: flex;
@@ -21,7 +22,7 @@ const TopBox = styled.div`
 
 const BackButton = styled.button`
     position: absolute;
-    left: 4%;
+    left: 5%;
     width: 150px;
     height: 45px;
     border: 1px solid #888;
@@ -44,11 +45,14 @@ const StatusBox = styled.div`
     border-radius: 18px;
     box-shadow: 0 2px 8px rgba(44,94,62,0.08);
     border: 1.5px solid #dbeedb;
-    padding: 32px 24px 32px 24px;
     width: 90%;
     max-width: 1500px;
     margin: 0 auto 32px auto;
 `;
+
+const StatesInnerBox = styled.div`
+    padding: 32px 24px 12px 24px;
+`
 
 const StatusGrid = styled.div`
     display: flex;
@@ -144,6 +148,23 @@ const CandidateInfo = styled.div`
     justify-content: space-between; 
 `;
 
+const ManagementBtnBox = styled.div`
+    text-align: center;
+    height: 40px;
+    line-height: 40px;
+`
+
+const ManagementBtn = styled.a`
+    display: block;
+    width: 100%;
+    font-size: 16px;
+    background-color: #437F5A;
+    color: #f9f9f9;
+    border: 1px solid #222222;
+    border-radius: 0px 0px 16px 16px;
+    text-decoration: none;
+`
+
 export default function VoteResult(info = null) {
     // 예시 데이터
     const list = [
@@ -193,6 +214,31 @@ export default function VoteResult(info = null) {
         }
     ];
 
+    const [userData, setUserData] = useState(null);
+    const [status, setStatus] = useState(false);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+
+        const unsubscribe = onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                const uid = user.uid;
+                const fetchedData = await getUser(uid);
+                setUserData(fetchedData.user);
+                setLoading(false);
+            } else {
+                console.log('redirecting to /');
+                window.location.href = '/';
+            }
+        });
+
+        return () => unsubscribe();
+    }, [])
+
+
+
+    if (loading) return null; // 초기 렌더링 없이 대기
+
     const renderVotes = () => {
         return list.map((data, index) => {
             const percent = Math.round((data.totalVotes / data.totalVoters) * 100);
@@ -200,35 +246,44 @@ export default function VoteResult(info = null) {
             return (
                 <States key={index}>
                     <StatusBox>
-                        <StatusGrid>
-                            <StatusItem>
-                                <StatusNum>{data.totalVotes}<span style={{ fontSize: "20px", fontWeight: "400" }}>/{data.totalVoters}</span></StatusNum>
-                                <StatusLabel>투표수</StatusLabel>
-                            </StatusItem>
-                            <StatusItem>
-                                <StatusNum>{percent}%</StatusNum>
-                                <StatusLabel>투표율</StatusLabel>
-                            </StatusItem>
-                            <StatusItem>
-                                <StatusNum>{data.status}</StatusNum>
-                                <StatusLabel>상태</StatusLabel>
-                            </StatusItem>
-                        </StatusGrid>
-                        <CandidateList>
-                            {data.candidates.map((c, idx) => (
-                                <CandidateRow key={c.number}>
-                                    <CandidateInfo>
-                                        <CandidateName>{c.number}. {c.names}</CandidateName>
-                                        <VoteCount>{c.votes}표</VoteCount>
-                                    </CandidateInfo>
-                                    <BarWrap>
-                                        <BarBg>
-                                            <Bar percent={candidatePercents[idx]}><PercentText>{candidatePercents[idx]}%</PercentText></Bar>
-                                        </BarBg>
-                                    </BarWrap>
-                                </CandidateRow>
-                            ))}
-                        </CandidateList>
+                        <StatesInnerBox>
+                            <StatusGrid>
+                                <StatusItem>
+                                    <StatusNum>{data.totalVotes}<span style={{ fontSize: "20px", fontWeight: "400" }}>/{data.totalVoters}</span></StatusNum>
+                                    <StatusLabel>투표수</StatusLabel>
+                                </StatusItem>
+                                <StatusItem>
+                                    <StatusNum>{percent}%</StatusNum>
+                                    <StatusLabel>투표율</StatusLabel>
+                                </StatusItem>
+                                <StatusItem>
+                                    <StatusNum>{data.status}</StatusNum>
+                                    <StatusLabel>상태</StatusLabel>
+                                </StatusItem>
+                            </StatusGrid>
+                            <CandidateList>
+                                {data.candidates.map((c, idx) => (
+                                    <CandidateRow key={c.number}>
+                                        <CandidateInfo>
+                                            <CandidateName>{c.number}. {c.names}</CandidateName>
+                                            <VoteCount>{c.votes}표</VoteCount>
+                                        </CandidateInfo>
+                                        <BarWrap>
+                                            <BarBg>
+                                                <Bar percent={candidatePercents[idx]}><PercentText>{candidatePercents[idx]}%</PercentText></Bar>
+                                            </BarBg>
+                                        </BarWrap>
+                                    </CandidateRow>
+                                ))}
+                            </CandidateList>
+                        </StatesInnerBox>
+                        {userData.type == 'teacher' ? <ManagementBtnBox>
+                            <ManagementBtn href='/vote/management'>
+                                관리하기
+                            </ManagementBtn>
+                        </ManagementBtnBox>
+                            : null}
+
                     </StatusBox>
                 </States>
             );

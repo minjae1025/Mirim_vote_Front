@@ -1,5 +1,4 @@
 import styled from '@emotion/styled'
-import reactLogo from '../assets/user_icon1.jpg'
 import { useState, useRef, useEffect } from 'react';
 import ProfileMenu from './ProfileMenu'
 import { auth, getUser } from '../services/firebase.js';
