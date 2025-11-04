@@ -112,7 +112,7 @@ export default function ProfileMenu({ open, onClose, anchorRef, profile }) {
                 <InfoEmail>{profile?.email || '로그인 해주세요.'}</InfoEmail>
                 <InfoName>{profile?.name || '로그인 해주세요.'}</InfoName>
                 <Line />
-                <Item role="menuitem" onClick={() => { window.location.href = "/vote/status" }}><ItemText>{"투표 상황"}</ItemText></Item>
+                <Item role="menuitem" onClick={() => { window.location.href = "/vote/status" }}><ItemText>{profile?.type == 'teacher' ? "투표 상황 및 관리" : "투표 상황"}</ItemText></Item>
                 <Line />
                 <Item role="menuitem" onClick={() => { onClose(); navigate('/mypage') }}><ItemText>마이페이지</ItemText></Item>
                 <Line />

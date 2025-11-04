@@ -2,10 +2,10 @@ import styled from '@emotion/styled'
 import Background from "../components/Background";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
-import { Page, Main } from "../components/Page";
-import { Title, SubTitle } from "../components/VoteTitles";
 import VoteControl from "../components/VoteControl";  
 import VoteManage from '../components/VoteManage';
+import { Page, Main } from "../components/Page";
+import { Title, SubTitle } from "../components/VoteTitles";
 import { useEffect, useRef, useState } from 'react';
 
 const TitleBtn = styled.button`
@@ -124,45 +124,8 @@ const AddCandidate = styled.button`
     cursor: pointer;
 `
 
-export default function VoteManagers() {
-
-    const data = {
-        candidates: [{ name1: '이민준', name2: '김민재' }, { name1: '육준성', name2: '전유리' }],
-    }
-
-    const url = window.location.search;
-    const urlParams = new URLSearchParams(url);
-    data.type = urlParams.get('type');
-    data.year = urlParams.get('year');
-    if (data.type == 'class') {
-        data.semester = urlParams.get('semester');
-        data.grade = urlParams.get('grade');
-        data.class = urlParams.get('class');
-    }
-
-    // console.log(vote_data);
-    // useEffect(async () => {
-    //     let params;
-    //     if (vote_type == 'class') {
-    //         params = `school-president?year=${data.year}`
-    //     }
-    //     else {
-    //         params = `class-president?year=${data.year}&semester=${data.semester}&grade=${data.grade}&class=${data.class}`
-    //     }
-    //     await fetch(`localhost:3000/api/vote/${params}`)
-    //         .then((response) => response.json())
-    //         .then((data) => console.log(data));
-    // }, []);
-
+export default function VoteAdd() {
     const [candidates, setCandidates] = useState([]);
-
-    useEffect(() => {
-        const initialCandidates = data.candidates.map(item => ({
-            name: data.type === 'school' ? `${item.name1},${item.name2}` : `${item.name}`,
-            isNew: false
-        }));
-        setCandidates(initialCandidates);
-    }, [data.type]);
 
     const addName = () => {
         setCandidates([...candidates, { name: '', isNew: true }]);
@@ -219,8 +182,7 @@ export default function VoteManagers() {
                             <TitleBtn type='button' onClick={() => { window.history.back() }} color="red">취소</TitleBtn>
                         </TitleBtnBox>
                         <TitleText>
-                            <Title>{data.type == 'school' ? `전교회장 선거` : `${data.semester}학기 학급회장 선거`}</Title>
-                            <SubTitle>{`${data.year}학년도 ${data.type == 'class' ? `${data.grade}학년 ${data.class}반` : ''} `}</SubTitle>
+                            <Title>{"새로운 선거 추가"}</Title>
                         </TitleText>
                     </TitleBox>
                     <Box>
@@ -230,8 +192,8 @@ export default function VoteManagers() {
                             <AddCandidate type="button" onClick={addName}>후보 추가</AddCandidate>
                         </CandidateBox>
                     </Box>
-                    <VoteControl></VoteControl>
-                    <VoteManage></VoteManage>
+                    <VoteControl/>
+                    <VoteManage/>
                 </FormBox>
             </Main>
             <Footer />

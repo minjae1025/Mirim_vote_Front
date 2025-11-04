@@ -64,26 +64,27 @@ export default function Header() {
 
     useEffect(() => {
         if (initialAuthCheckDone.current) return;
-        
+
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
-                if (user) {
-                    const uid = user.uid;
-                    const fetchedData = await getUser(uid);
-                    setUserData(fetchedData.user);
-                    setLoading(false);
-                    initialAuthCheckDone.current = true;
-                } else {
-                    console.log('redirecting to /');
-                    window.location.href = '/';
-                }
-            });
+            if (user) {
+                const uid = user.uid;
+                const fetchedData = await getUser(uid);
+                setUserData(fetchedData.user);
+                setLoading(false);
+                initialAuthCheckDone.current = true;
+            } else {
+                console.log('redirecting to /');
+                window.location.href = '/';
+            }
+        });
 
         return () => unsubscribe();
     }, [])
 
-    
-    
-    if (loading) return null; // 초기 렌더링 없이 대기
+
+
+    if (loading) 
+        return (<HeaderWrap><Title><a href="/dashboard" style={{ color: 'white', textDecoration: 'none' }}>Mirim Vote</a></Title></HeaderWrap>); // 초기 렌더링 없이 대기
 
     // console.log(userData);
     return (
@@ -96,7 +97,7 @@ export default function Header() {
                 <button ref={avatarRef} onClick={() => setStatus(v => !v)} aria-expanded={status} style={{ border: 0, background: 'transparent', padding: 0 }}>
                     <img src={userData.photoURL} alt="Profile" />
                 </button>
-                <ProfileMenu open={status} onClose={() => setStatus(false)} anchorRef={avatarRef} profile={ userData } />
+                <ProfileMenu open={status} onClose={() => setStatus(false)} anchorRef={avatarRef} profile={userData} />
             </Right>
         </HeaderWrap>
     )

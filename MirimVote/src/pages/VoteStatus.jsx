@@ -9,20 +9,16 @@ import { useState, useEffect } from 'react';
 import { auth, getUser } from '../services/firebase.js';
 import { onAuthStateChanged } from "firebase/auth";
 
-const url = new URL(window.location.href);
-const urlParams = url.searchParams;
-
 const TopBox = styled.div`
     display: flex;
-    flex-direction: row;
     align-items: center;
-    justify-content: center;
+    justify-content: start;
+    max-width: 1200px;
+    margin: 0 auto;
     margin-bottom: 20px;
 `;
 
 const BackButton = styled.button`
-    position: absolute;
-    left: 5%;
     width: 150px;
     height: 45px;
     border: 1px solid #888;
@@ -30,11 +26,13 @@ const BackButton = styled.button`
     margin-top: 20px;
     border-radius: 10px;
     cursor: pointer;
+    margin-left: 10px;
 `;
 
 const States = styled.div`
     position: relative;
     margin: 20px, 20px, 20px, 20px;
+    padding: 0px 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -45,9 +43,9 @@ const StatusBox = styled.div`
     border-radius: 18px;
     box-shadow: 0 2px 8px rgba(44,94,62,0.08);
     border: 1.5px solid #dbeedb;
-    width: 90%;
-    max-width: 1500px;
-    margin: 0 auto 32px auto;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0px 0px 24px 0px;
 `;
 
 const StatesInnerBox = styled.div`
@@ -154,9 +152,10 @@ const ManagementBtnBox = styled.div`
     line-height: 40px;
 `
 
-const ManagementBtn = styled.a`
+const ManagementBtn = styled.button`
     display: block;
     width: 100%;
+    height: 40px;
     font-size: 16px;
     background-color: #437F5A;
     color: #f9f9f9;
@@ -165,10 +164,37 @@ const ManagementBtn = styled.a`
     text-decoration: none;
 `
 
+const Label = styled.p`
+    color: #222;
+    font-size: 32px;
+    font-weight: 600;
+    margin: 0;
+`
+
+const StatusTitle = styled.div`
+    width: 100%;
+    max-width: 1200px;
+    display: flex;
+    align-items: end;
+`
+
+const SubLabel = styled.p`
+    color: #666;
+    font-size: 16px;
+    margin: 0;
+    padding: 0 0 3px 5px;
+
+`
+
 export default function VoteResult(info = null) {
     // 예시 데이터
     const list = [
         {
+            type: 'class',
+            year: 2025,
+            semester: 1,
+            grade: 2,
+            class: 4,
             totalVoters: 17,
             totalVotes: 17,
             status: "종료",
@@ -191,6 +217,11 @@ export default function VoteResult(info = null) {
             ]
         },
         {
+            type: 'class',
+            year: 2025,
+            semester: 2,
+            grade: 2,
+            class: 4,
             totalVoters: 17,
             totalVotes: 17,
             status: "종료",
@@ -243,8 +274,13 @@ export default function VoteResult(info = null) {
         return list.map((data, index) => {
             const percent = Math.round((data.totalVotes / data.totalVoters) * 100);
             const candidatePercents = data.candidates.map(c => data.totalVotes === 0 ? 0 : Math.round((c.votes / data.totalVotes) * 100));
+            const label = data.type == 'school' ? `전교회장 선거` : `${data.semester}학기 학급회장 선거`;
             return (
                 <States key={index}>
+                    <StatusTitle>
+                        <Label>{label}</Label>
+                        <SubLabel>{`${data.year}학년도 ${data.type == 'class' ? `${data.grade}학년 ${data.class}반` : '' } `}</SubLabel>
+                    </StatusTitle>
                     <StatusBox>
                         <StatesInnerBox>
                             <StatusGrid>
@@ -278,7 +314,7 @@ export default function VoteResult(info = null) {
                             </CandidateList>
                         </StatesInnerBox>
                         {userData.type == 'teacher' ? <ManagementBtnBox>
-                            <ManagementBtn href='/vote/management'>
+                            <ManagementBtn onClick={() => { window.location.href = `/vote/management?type=${data.type}&year=${data.year}${data.type == 'class' ? `&semester=${data.semester}&grade=${data.grade}&class=${data.class}` : null }`}}>
                                 관리하기
                             </ManagementBtn>
                         </ManagementBtnBox>
@@ -299,7 +335,7 @@ export default function VoteResult(info = null) {
                     <BackButton>
                         <img src={BackButtonText} alt="Back" width="66%" onClick={() => window.location.href = '/dashboard'} />
                     </BackButton>
-                    <Title style={{ width: "70%" }}>투표 상황 및 결과</Title>
+                    <Title style={{ width: "70%", position: 'absolute', left: "50%", transform: "translateX(-50%)" }}>투표 상황 및 결과</Title>
                 </TopBox>
                 {renderVotes()}
             </Main>
