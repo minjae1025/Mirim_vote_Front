@@ -3,9 +3,10 @@ import Index from './pages/Index'
 import Dashboard from './pages/Dashboard'
 import Vote from './pages/Vote'
 import VoteEnd from './pages/VoteEnd'
-import VoteResult from './pages/VoteResult'
+import VoteStatus from './pages/VoteStatus'
 import MyPage from './pages/MyPage'
 import VoteManagement from './pages/VoteManagement'
+import VoteAdd from './pages/VoteAdd'
 import { Routes, Route } from 'react-router-dom';
 
 function App() {
@@ -16,9 +17,11 @@ function App() {
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/vote/:type-president" element={<Vote />} />
       <Route path="/vote/vote-end" element={<VoteEnd />} />
-      <Route path="/vote/result" element={<VoteResult />} />
+      <Route path="/vote/status" element={<VoteStatus />} />
       <Route path="/mypage" element={<MyPage />} />
-      <Route path="/vote/managers" element={<VoteManagement />} />
+      <Route path="/vote/management" element={<VoteManagement />} />
+      <Route path="/vote/add" element={<VoteAdd />}/>
+
     </Routes>
   )
 }

@@ -2,9 +2,9 @@ import styled from '@emotion/styled'
 
 const Title = styled.p`
   text-align: center;
-  font-size: 42px;
+  font-size: 40px;
   font-weight: 600;
-  margin: 28px 0 8px;
+  margin: 16px 0px 0px 0px;
   color: #222;
 `;
 
