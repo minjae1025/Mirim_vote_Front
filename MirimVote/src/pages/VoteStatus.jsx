@@ -150,6 +150,7 @@ const ManagementBtnBox = styled.div`
     text-align: center;
     height: 40px;
     line-height: 40px;
+    
 `
 
 const ManagementBtn = styled.button`
@@ -162,6 +163,7 @@ const ManagementBtn = styled.button`
     border: 1px solid #222222;
     border-radius: 0px 0px 16px 16px;
     text-decoration: none;
+    cursor: pointer;
 `
 
 const Label = styled.p`

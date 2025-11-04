@@ -4,7 +4,7 @@ import Footer from "../components/Footer";
 import Header from "../components/Header";
 import { Page, Main } from "../components/Page";
 import { Title, SubTitle } from "../components/VoteTitles";
-import VoteControl from "../components/VoteControl";  
+import VoteReservation from "../components/VoteReservation";  
 import VoteManage from '../components/VoteManage';
 import { useEffect, useRef, useState } from 'react';
 
@@ -124,53 +124,73 @@ const AddCandidate = styled.button`
     cursor: pointer;
 `
 
+import { useLocation } from 'react-router-dom';
+
 export default function VoteManagers() {
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const voteType = queryParams.get('type');
+    const year = queryParams.get('year');
+    const semester = queryParams.get('semester');
+    const grade = queryParams.get('grade');
+    const classNum = queryParams.get('class');
+
+    const [candidates, setCandidates] = useState([]);
+    const [isAutoStopEnabled, setIsAutoStopEnabled] = useState(false);
+    const [voterCount, setVoterCount] = useState(0);
+    const [isReservationEnabled, setIsReservationEnabled] = useState(false);
+    const [startDate, setStartDate] = useState('');
+    const [startTime, setStartTime] = useState('');
+    const [endDate, setEndDate] = useState('');
+    const [endTime, setEndTime] = useState('');
 
     const data = {
         candidates: [{ name1: '이민준', name2: '김민재' }, { name1: '육준성', name2: '전유리' }],
     }
 
-    const url = window.location.search;
-    const urlParams = new URLSearchParams(url);
-    data.type = urlParams.get('type');
-    data.year = urlParams.get('year');
-    if (data.type == 'class') {
-        data.semester = urlParams.get('semester');
-        data.grade = urlParams.get('grade');
-        data.class = urlParams.get('class');
-    }
-
-    // console.log(vote_data);
-    // useEffect(async () => {
-    //     let params;
-    //     if (vote_type == 'class') {
-    //         params = `school-president?year=${data.year}`
-    //     }
-    //     else {
-    //         params = `class-president?year=${data.year}&semester=${data.semester}&grade=${data.grade}&class=${data.class}`
-    //     }
-    //     await fetch(`localhost:3000/api/vote/${params}`)
-    //         .then((response) => response.json())
-    //         .then((data) => console.log(data));
-    // }, []);
-
-    const [candidates, setCandidates] = useState([]);
-
     useEffect(() => {
         const initialCandidates = data.candidates.map(item => ({
-            name: data.type === 'school' ? `${item.name1},${item.name2}` : `${item.name}`,
+            name: voteType === 'school' ? `${item.name1},${item.name2}` : `${item.name}`,
             isNew: false
         }));
         setCandidates(initialCandidates);
-    }, [data.type]);
+    }, [voteType]);
 
     const addName = () => {
         setCandidates([...candidates, { name: '', isNew: true }]);
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("서버로 보낼 데이터 (React State):", candidates);
+        const voteData = {
+            candidates,
+            isAutoStopEnabled,
+            voterCount,
+            isReservationEnabled,
+            startDate,
+            startTime,
+            endDate,
+            endTime,
+            voteType,
+            year,
+            semester,
+            grade,
+            classNum
+        };
+        console.log("서버로 보낼 데이터 (React State):", voteData);
+        try {
+            const response = await fetch(`http://localhost:3000/vote/update/${voteType}` , {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(voteData)
+            });
+            const data = await response.json();
+            console.log(data);
+        } catch (error) {
+            console.error('Error:', error);
+        }
     };
 
     const handleOptionChange = (index, value) => {
@@ -219,8 +239,8 @@ export default function VoteManagers() {
                             <TitleBtn type='button' onClick={() => { window.history.back() }} color="red">취소</TitleBtn>
                         </TitleBtnBox>
                         <TitleText>
-                            <Title>{data.type == 'school' ? `전교회장 선거` : `${data.semester}학기 학급회장 선거`}</Title>
-                            <SubTitle>{`${data.year}학년도 ${data.type == 'class' ? `${data.grade}학년 ${data.class}반` : ''} `}</SubTitle>
+                            <Title>{voteType == 'school' ? `전교회장 선거` : `${semester}학기 학급회장 선거`}</Title>
+                            <SubTitle>{`${year}학년도 ${voteType == 'class' ? `${grade}학년 ${classNum}반` : ''} `}</SubTitle>
                         </TitleText>
                     </TitleBox>
                     <Box>
@@ -230,8 +250,24 @@ export default function VoteManagers() {
                             <AddCandidate type="button" onClick={addName}>후보 추가</AddCandidate>
                         </CandidateBox>
                     </Box>
-                    <VoteControl></VoteControl>
-                    <VoteManage></VoteManage>
+                    <VoteReservation 
+                        isReservationEnabled={isReservationEnabled}
+                        setIsReservationEnabled={setIsReservationEnabled}
+                        startDate={startDate}
+                        setStartDate={setStartDate}
+                        startTime={startTime}
+                        setStartTime={setStartTime}
+                        endDate={endDate}
+                        setEndDate={setEndDate}
+                        endTime={endTime}
+                        setEndTime={setEndTime}
+                    />
+                    <VoteManage 
+                        isAutoStopEnabled={isAutoStopEnabled}
+                        setIsAutoStopEnabled={setIsAutoStopEnabled}
+                        voterCount={voterCount}
+                        setVoterCount={setVoterCount}
+                    />
                 </FormBox>
             </Main>
             <Footer />
