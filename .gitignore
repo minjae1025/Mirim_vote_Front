@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # compiled output
 /dist
 /node_modules
@@ -58,3 +59,12 @@ report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 src/auth/mirim-vote-firebase-adminsdk-fbsvc-9b2d0a4a71.json
 src/auth/*.json
 Mirim_vote_Back/
+=======
+.DS_Store
+
+# .v4p backup files
+*~.xml
+
+# Dynamic plugins .dll
+bin/
+>>>>>>> ccf69f09a44bf442517c82fb17a69321a8e66c42
