@@ -4,7 +4,7 @@ import Footer from "../components/Footer";
 import Header from "../components/Header";
 import { Page, Main } from "../components/Page";
 import { Title, SubTitle } from "../components/VoteTitles";
-import VoteReservation from "../components/VoteReservation";  
+import VoteControl from "../components/VoteControl";  
 import VoteManage from '../components/VoteManage';
 import { useEffect, useRef, useState } from 'react';
 
@@ -137,12 +137,8 @@ export default function VoteManagers() {
 
     const [candidates, setCandidates] = useState([]);
     const [isAutoStopEnabled, setIsAutoStopEnabled] = useState(false);
-    const [voterCount, setVoterCount] = useState(0);
-    const [isReservationEnabled, setIsReservationEnabled] = useState(false);
-    const [startDate, setStartDate] = useState('');
-    const [startTime, setStartTime] = useState('');
-    const [endDate, setEndDate] = useState('');
-    const [endTime, setEndTime] = useState('');
+    const [voterCount, setVoterCount] = useState(1);
+    const [isStart, setIsStart] = useState(false);
 
     const data = {
         candidates: [{ name1: '이민준', name2: '김민재' }, { name1: '육준성', name2: '전유리' }],
@@ -166,11 +162,7 @@ export default function VoteManagers() {
             candidates,
             isAutoStopEnabled,
             voterCount,
-            isReservationEnabled,
-            startDate,
-            startTime,
-            endDate,
-            endTime,
+            isStart,
             voteType,
             year,
             semester,
@@ -250,17 +242,9 @@ export default function VoteManagers() {
                             <AddCandidate type="button" onClick={addName}>후보 추가</AddCandidate>
                         </CandidateBox>
                     </Box>
-                    <VoteReservation 
-                        isReservationEnabled={isReservationEnabled}
-                        setIsReservationEnabled={setIsReservationEnabled}
-                        startDate={startDate}
-                        setStartDate={setStartDate}
-                        startTime={startTime}
-                        setStartTime={setStartTime}
-                        endDate={endDate}
-                        setEndDate={setEndDate}
-                        endTime={endTime}
-                        setEndTime={setEndTime}
+                    <VoteControl 
+                        isStart={isStart}
+                        setIsStart={setIsStart}
                     />
                     <VoteManage 
                         isAutoStopEnabled={isAutoStopEnabled}

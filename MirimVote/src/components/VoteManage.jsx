@@ -107,54 +107,6 @@ const VoterCountInput = styled.input`
     width: 35%; /* 30-40% range */
 `;
 
-const StopAndStart = styled.div`
-    margin-top: 20px;
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-    justify-content: space-between;
-`;
-
-const ControlButton = styled.button`
-    background-color: #437F5A;
-    color: white;
-    border: none;
-    border-radius: 10px;
-    padding: 10px 20px;
-    cursor: pointer;
-    font-size: 16px;
-    width: 100%;
-
-    &:hover {
-        background-color: #366447;
-    }
-`;
-
-const InputDateBox = styled.div`
-    margin-top: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-`;
-
-const DateInputContainer = styled.div`
-    display: flex;
-    gap: 16px;
-    align-items: center;
-
-    label {
-        width: 80px;
-    }
-`;
-
-const DateInput = styled.input`
-    border: 1px solid #888888;
-    border-radius: 10px;
-    padding: 8px;
-    font-size: 16px;
-    flex: 1;
-`;
-
 export default function VoteManage({ isAutoStopEnabled, setIsAutoStopEnabled, voterCount, setVoterCount }) {
 
     return (
@@ -175,7 +127,7 @@ export default function VoteManage({ isAutoStopEnabled, setIsAutoStopEnabled, vo
                 </AutoStopBox>
                 <VoterCountBox>
                     <label>유권자 수: </label>
-                    <VoterCountInput type="number" value={voterCount} onChange={e => setVoterCount(e.target.value)} />
+                    <VoterCountInput type="number" value={voterCount} onChange={e => setVoterCount(e.target.value) } min={1} max={999} />
                 </VoterCountBox>
             </VoteManagement>
         </Box>

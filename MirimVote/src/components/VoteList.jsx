@@ -38,7 +38,7 @@ const Title = styled.p`
 const Info = styled.p`
     margin: 0;
     font-size: 16px;
-    margin-bottom: 5px;
+    margin-bottom: 35px;
     color: #444;
 `
 
@@ -119,8 +119,6 @@ const PresentVote = styled.div`
     `
 
 export default function VoteList({ list }) {
-    const now = new Date('2025-07-31T09:30:00'); // 테스트용 현재 시간;
-
     const [userData, setUserData] = useState(null);
     const [loading, setLoading] = useState(true);
     const initialAuthCheckDone = useRef(false);
@@ -153,15 +151,6 @@ export default function VoteList({ list }) {
             if (finished !== isFinished) return null;
 
             let isStarted;
-            let vote_time;
-
-            if (new Date(vote.vote_start) >= now) {
-                isStarted = false;
-                vote_time = new Date(vote.vote_start).toLocaleString();
-            } else {
-                isStarted = true;
-                vote_time = Math.floor((new Date(vote.vote_end) - now) / 1000 / 60);
-            }
 
             const btnDisabled = !isStarted;
 
@@ -176,8 +165,7 @@ export default function VoteList({ list }) {
                 <VoteCard key={vote.id}>
                     <Box>
                         <Title>{vote.title}</Title>
-                        <Info>{vote.type === "class" ? `${vote.year}학년도 ${vote.grade}학년 ${vote.class}반` : `${vote.year}학년도`}</Info>
-                        <Time>{isStarted ? (isFinished ? `종료 : ${new Date(vote.vote_end).toLocaleString()}` : `남은 시간 : ${Math.floor(vote_time / 60)}시간 ${vote_time % 60}분`) : `시작 예정 : ${vote_time}`}</Time>
+                        <Info>{vote.type === "class" ? `${vote.year}학년도 ${vote.grade}학년 ${vote.classNum}반` : `${vote.year}학년도`}</Info>
                     </Box>
                     <VoteButton style={button_style} onClick={() => { location.href = isFinished ? `/vote/result?${url_parameters}` : `/vote/${vote.type}-president?${url_parameters}` }} disabled={btnDisabled}>
                         {button_text}
