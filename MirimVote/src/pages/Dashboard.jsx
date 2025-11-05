@@ -5,6 +5,7 @@ import Header from "../components/Header";
 import VoteList from "../components/VoteList";
 import { Page, Main } from "../components/Page";
 import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function Dashboard() {
     const [voteData, setVoteData] = useState([]);

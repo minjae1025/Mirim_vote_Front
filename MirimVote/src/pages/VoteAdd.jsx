@@ -8,6 +8,8 @@ import { Title, SubTitle } from "../components/VoteTitles";
 import { useEffect, useRef, useState } from 'react';
 import { auth } from '../services/firebase';
 import { onAuthStateChanged } from 'firebase/auth';
+import { auth } from '../services/firebase';
+import { onAuthStateChanged } from 'firebase/auth';
 
 const TitleBtn = styled.button`
     width: 120px;
@@ -136,6 +138,32 @@ const YearInput = styled.input`
 const VoteType = styled.div``
 
 const FlexContainer = styled.div``
+const VoteTypeBox = styled.div`
+    border: 1px solid #666666;
+    border-radius: 20px;
+    background-color: #f9f9f9;
+    padding: 32px;
+    margin-bottom: 24px;
+`;
+const Select = styled.select`
+    border: 1px solid #888888;
+    border-radius: 10px;
+    padding: 8px;
+    font-size: 16px;
+    margin-right: 16px;
+`;
+const YearInput = styled.input`
+    border: 1px solid #888888;
+    border-radius: 10px;
+    padding: 8px;
+    font-size: 16px;
+    width: 100px;
+    margin-right: 16px;
+`;
+
+const VoteType = styled.div``
+
+const FlexContainer = styled.div``
 
 export default function VoteAdd() {
     const [candidates, setCandidates] = useState([{ name: '', isNew: true }]);
@@ -160,6 +188,7 @@ export default function VoteAdd() {
         setCandidates([...candidates, { name: '', isNew: true }]);
     };
 
+    const handleSubmit = async (e) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -283,6 +312,32 @@ export default function VoteAdd() {
                             </FlexContainer>
                         </VoteTypeBox>
                     </VoteType>
+                    <VoteType>
+                        <Label>투표 종류</Label>
+                        <VoteTypeBox>
+                            <FlexContainer style={{ gap: '10px' }}>
+                                <Select value={voteType} onChange={e => setVoteType(e.target.value)}><option value="school">전교회장</option><option value="class">학급회장</option></Select><YearInput type="number" value={year} readOnly />
+                                {voteType === 'class' && (<>
+                                    <Select value={semester} onChange={e => setSemester(e.target.value)}>
+                                        <option value={1}>1학기</option>
+                                        <option value={2}>2학기</option>
+                                    </Select>
+                                    <Select value={grade} onChange={e => setGrade(e.target.value)}>
+                                        <option value={1}>1학년</option>
+                                        <option value={2}>2학년</option>
+                                        <option value={3}>3학년</option>
+                                    </Select>
+                                    <Select value={classNum} onChange={e => setClassNum(e.target.value)}>
+                                        <option value={1}>1반</option>
+                                        <option value={2}>2반</option>
+                                        <option value={3}>3반</option>
+                                        <option value={4}>4반</option>
+                                        <option value={5}>5반</option>
+                                        <option value={6}>6반</option>
+                                    </Select></>)}
+                            </FlexContainer>
+                        </VoteTypeBox>
+                    </VoteType>
                     <Box>
                         <Label>후보자 관리</Label>
                         <CandidateBox>
@@ -290,6 +345,12 @@ export default function VoteAdd() {
                             <AddCandidate type="button" onClick={addName}>후보 추가</AddCandidate>
                         </CandidateBox>
                     </Box>
+                    <VoteManage
+                        isAutoStopEnabled={isAutoStopEnabled}
+                        setIsAutoStopEnabled={setIsAutoStopEnabled}
+                        voterCount={voterCount}
+                        setVoterCount={setVoterCount}
+                    />
                     <VoteManage
                         isAutoStopEnabled={isAutoStopEnabled}
                         setIsAutoStopEnabled={setIsAutoStopEnabled}

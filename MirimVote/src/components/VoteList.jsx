@@ -39,6 +39,7 @@ const Info = styled.p`
     margin: 0;
     font-size: 16px;
     margin-bottom: 35px;
+    margin-bottom: 35px;
     color: #444;
 `
 
