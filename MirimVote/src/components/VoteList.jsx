@@ -179,7 +179,7 @@ export default function VoteList({ list }) {
 
     return (
         <Container>
-            <Label>진행 및 예정된 선거</Label>
+            <Label>진행중인 선거</Label>
             <PresentVote>
                 {renderVotes(false)}
                 {userData.type == 'teacher' ? (
