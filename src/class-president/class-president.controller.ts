@@ -23,7 +23,13 @@ export class ClassPresidentController {
     @Query('class') classNum: number,
   ) {
     const list = await this.service.getPresidents(Number(year), Number(semester), Number(grade), Number(classNum));
-    return { list };
+    // console.log(list);
+    return list;
+  }
+
+  @Get('all')
+  async all() {
+    return await this.service.getAllPresidents();
   }
 
   @Post(':id/vote') // 투표: 학생도 호출 가능
