@@ -67,7 +67,6 @@ const SelectedInfo = styled.div`
 `;
 
 
-
 export default function Vote() {
     const [selected, setSelected] = useState(null);
     const [data, setData] = useState([]);
@@ -102,16 +101,14 @@ export default function Vote() {
 
         fetchData();
 
-    }, []); // 컴포넌트가 처음 렌더링될 때만 실행
+    }, []);
 
+    // 선택한 후보를 서버에 제출
     function handleSubmit(selected) {
-        // 선택한 후보를 서버에 제출
         if (selected == null) {
             alert("후보를 선택해주세요.");
             return;
         }
-
-        //이 아래코드는 실제로 연동할때 사용할 코드
 
         fetch(`http://localhost:3000/apivote${type}-president/${data[selected].number}/vote`, {
             method: 'POST',

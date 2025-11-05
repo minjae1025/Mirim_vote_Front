@@ -85,6 +85,7 @@ export default function Dashboard() {
         }
         classfecth();
     }, [])
+    
     // const data = [
     //     { id: 1, title: "전교회장 선거", finish: false, type: "school", year: 2025 },
     //     { id: 2, title: "2학기 학급회장 선거", finish: false, type: "class", year: 2025, grade: 2, class: 4, semester: 2 },

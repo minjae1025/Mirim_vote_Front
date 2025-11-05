@@ -70,7 +70,7 @@ const Box = styled.div`
 const PresentVote = styled.div`
 `
 
-    const VoteAddBtn = styled.div`
+const VoteAddBtn = styled.div`
         height: 150px;
         width: 150px;
         display: inline-flex;
@@ -123,6 +123,7 @@ export default function VoteList({ list }) {
     const [userData, setUserData] = useState(null);
     const [loading, setLoading] = useState(true);
     const initialAuthCheckDone = useRef(false);
+    const [active, setActive] = useState();
 
     useEffect(() => {
         if (initialAuthCheckDone.current) return;
@@ -173,22 +174,22 @@ export default function VoteList({ list }) {
         });
     };
 
-    if (loading) 
+    if (loading)
         return; // 초기 렌더링 없이 대기
 
     return (
         <Container>
             <Label>진행 및 예정된 선거</Label>
             <PresentVote>
-                    {renderVotes(false)}
-                    {userData.type == 'teacher'? (
-                        <VoteAddBtn onClick={() => { window.location.href = "/vote/add" }}>
-                            <div className="plus">
-                                <div className="bar horizontal" />
-                                <div className="bar vertical" />
-                            </div>
-                        </VoteAddBtn>
-                    ) : null}
+                {renderVotes(false)}
+                {userData.type == 'teacher' ? (
+                    <VoteAddBtn onClick={() => { window.location.href = "/vote/add" }}>
+                        <div className="plus">
+                            <div className="bar horizontal" />
+                            <div className="bar vertical" />
+                        </div>
+                    </VoteAddBtn>
+                ) : null}
             </PresentVote>
             <Label>종료된 선거</Label>
             {renderVotes(true)}

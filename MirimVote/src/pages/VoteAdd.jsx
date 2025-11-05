@@ -111,6 +111,35 @@ const AddCandidate = styled.button`
     cursor: pointer;
 `
 
+const VoteTypeBox = styled.div`
+    border: 1px solid #666666;
+    border-radius: 20px;
+    background-color: #f9f9f9;
+    padding: 32px;
+    margin-bottom: 24px;
+`;
+
+const Select = styled.select`
+    border: 1px solid #888888;
+    border-radius: 10px;
+    padding: 8px;
+    font-size: 16px;
+    margin-right: 16px;
+`;
+const YearInput = styled.input`
+    border: 1px solid #888888;
+    border-radius: 10px;
+    padding: 8px;
+    font-size: 16px;
+    width: 100px;
+    margin-right: 16px;
+`;
+
+
+const FlexContainer = styled.div``
+
+const VoteType = styled.div``
+
 export default function VoteAdd() {
     const [candidates, setCandidates] = useState([{ name: '', isNew: true }]);
     const [isAutoStopEnabled, setIsAutoStopEnabled] = useState(false);
@@ -123,7 +152,7 @@ export default function VoteAdd() {
     const [idToken, setIdToken] = useState();
 
     useEffect(() => {
-        onAuthStateChanged(auth, async(user) => {
+        onAuthStateChanged(auth, async (user) => {
             if (user) {
                 setIdToken(await auth.currentUser.getIdToken());
             }
@@ -162,9 +191,32 @@ export default function VoteAdd() {
                     voteData.grade = Number(grade);
                     voteData.classNum = Number(classNum);
                 }
-                console.log("서버로 보낼 데이터 (React State):", voteData);
 
-                const response = await fetch(`http://localhost:3000/apivote${voteType}-president`, {
+                voteData.electionId = `${voteType[0]}_${voteData.year}`;
+                if (voteType == 'class') {
+                    voteData.electionId += `${voteData.semester}${voteData.grade}${voteData.classNum}`;
+                }
+
+                const response1 = await fetch(`http://localhost:3000/settings`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        electionId: voteData.electionId,
+                        active: false,
+                        voterCount: voterCount,
+                        autoClose: isAutoStopEnabled,
+                    })
+                });
+                if (!response1.ok) {
+                    alert("이미 생성된 투표입니다.")
+                    continue;
+                }
+
+                delete voteData.electionId;
+
+                const response2 = await fetch(`http://localhost:3000/apivote${voteType}-president`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -172,8 +224,9 @@ export default function VoteAdd() {
                     },
                     body: JSON.stringify(voteData)
                 });
-                const data = await response.json();
-                console.log(data);
+                const data2 = await response1.json();
+                console.log(data2);
+
                 alert("추가 완료!")
                 window.location.href = '/dashboard';
             }
@@ -231,32 +284,6 @@ export default function VoteAdd() {
                             <Title>{"새로운 선거 추가"}</Title>
                         </TitleText>
                     </TitleBox>
-                    <VoteType>
-                        <Label>투표 종류</Label>
-                        <VoteTypeBox>
-                            <FlexContainer style={{ gap: '10px' }}>
-                                <Select value={voteType} onChange={e => setVoteType(e.target.value)}><option value="school">전교회장</option><option value="class">학급회장</option></Select><YearInput type="number" value={year} readOnly />
-                                {voteType === 'class' && (<>
-                                    <Select value={semester} onChange={e => setSemester(e.target.value)}>
-                                        <option value={1}>1학기</option>
-                                        <option value={2}>2학기</option>
-                                    </Select>
-                                    <Select value={grade} onChange={e => setGrade(e.target.value)}>
-                                        <option value={1}>1학년</option>
-                                        <option value={2}>2학년</option>
-                                        <option value={3}>3학년</option>
-                                    </Select>
-                                    <Select value={classNum} onChange={e => setClassNum(e.target.value)}>
-                                        <option value={1}>1반</option>
-                                        <option value={2}>2반</option>
-                                        <option value={3}>3반</option>
-                                        <option value={4}>4반</option>
-                                        <option value={5}>5반</option>
-                                        <option value={6}>6반</option>
-                                    </Select></>)}
-                            </FlexContainer>
-                        </VoteTypeBox>
-                    </VoteType>
                     <VoteType>
                         <Label>투표 종류</Label>
                         <VoteTypeBox>

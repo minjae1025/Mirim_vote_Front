@@ -92,7 +92,30 @@ const SwitchContent = styled.div`
 
 const SwitchTextBox = styled.div``
 
-export default function VoteControl({ isStart, setIsStart }) {
+export default function VoteControl({ isStart, setIsStart, electionId }) {
+    const handleToggle = async () => {
+        const newIsStart = !isStart;
+        setIsStart(newIsStart); // Optimistic update
+
+        try {
+            const response = await fetch(`http://localhost:3000/settings/${electionId}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ active: newIsStart }),
+            });
+            if (!response.ok) {
+                throw new Error(`Failed to update vote status: ${response.status}`);
+            }
+            // If API call fails, you might want to revert the UI state
+        } catch (error) {
+            console.error('Error updating vote status:', error);
+            alert(`투표 상태 업데이트 실패: ${error.message}`);
+            setIsStart(isStart); // Revert optimistic update on error
+        }
+    };
+
     return (
         <Box>
             <Label>투표 제어</Label>
@@ -103,7 +126,7 @@ export default function VoteControl({ isStart, setIsStart }) {
                         <SwitchContent>활성화하면 투표가 진행됩니다</SwitchContent>
                     </SwitchTextBox>
                     <SwitchWrapper>
-                        <HiddenCheckbox type="checkbox" checked={isStart} onChange={() => setIsStart(!isStart)} />
+                        <HiddenCheckbox type="checkbox" checked={isStart} onChange={handleToggle} />
                         <Slider className="slider"></Slider>
                     </SwitchWrapper>
                 </SwitchContainer>
