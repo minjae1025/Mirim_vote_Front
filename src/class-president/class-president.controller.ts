@@ -1,20 +1,21 @@
-import { Controller, Get, Post, Patch, Delete, Query, Body, UseGuards } from '@nestjs/common';
+// ...existing code...
+import { Controller, Get, Post, Patch, Delete, Query, Body, UseGuards, Param } from '@nestjs/common';
 import { ClassPresidentService } from './class-president.service';
 import { CreateClassPresidentDto } from './dto/create-class.dto';
 import { UpdateClassPresidentDto } from './dto/update-class.dto';
 import { TeacherGuard } from '../Teacher';
-@UseGuards(TeacherGuard)
 @Controller('apivoteclass-president')
 export class ClassPresidentController {
   constructor(private readonly service: ClassPresidentService) {}
 
-  @Post() // 후보 추가
+  @Post() // 후보 추가 (선생님 전용)
+  @UseGuards(TeacherGuard)
   async create(@Body() dto: CreateClassPresidentDto) {
     await this.service.addPresident(dto);
     return { success: true };
   }
 
-  @Get() // 후보 리스트 조회
+  @Get() // 후보 리스트 조회 (모두 접근 가능)
   async list(
     @Query('year') year: number,
     @Query('semester') semester: number,
@@ -25,13 +26,21 @@ export class ClassPresidentController {
     return { list };
   }
 
-  @Patch() // 후보 수정
+  @Post(':id/vote') // 투표: 학생도 호출 가능
+  async vote(@Param('id') id: string) {
+    await this.service.voteCandidate(id);
+    return { success: true };
+  }
+
+  @Patch() // 후보 수정 (선생님 전용)
+  @UseGuards(TeacherGuard)
   async update(@Query('id') id: string, @Body() dto: UpdateClassPresidentDto) {
     await this.service.updatePresident(id, dto);
     return { success: true };
   }
 
-  @Delete() // 후보 삭제
+  @Delete() // 후보 삭제 (선생님 전용)
+  @UseGuards(TeacherGuard)
   async remove(@Query('number') num: string) {
     await this.service.deletePresident(num);
     return { success: true };

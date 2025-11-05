@@ -1,8 +1,8 @@
-// school-president.service.ts
+  // school-president.service.ts
 import { Injectable } from '@nestjs/common';
 import { FirebaseService } from '../firebase/firebase.service';
 import { SchoolPresidentCandidate } from './interfaces/school.interface';
-
+import * as admin from 'firebase-admin';
 @Injectable()
 export class SchoolPresidentService {
   constructor(private readonly firebase: FirebaseService) {}
@@ -32,7 +32,12 @@ export class SchoolPresidentService {
     await this.firebase.db.collection('school-president-candidates').doc(number).update(update);
     return true;
   }
-
+  async voteCandidate(id: string): Promise<void> {
+    await this.firebase.db
+      .collection('school-president-candidates')
+      .doc(id)
+      .update({ count: admin.firestore.FieldValue.increment(1) });
+  }
   // 후보 삭제
   async deletePresident(number: string) {
     await this.firebase.db.collection('school-president-candidates').doc(number).delete();

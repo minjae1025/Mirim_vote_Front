@@ -2,6 +2,7 @@
 import { Injectable } from '@nestjs/common';
 import { FirebaseService } from '../firebase/firebase.service';
 import { ClassPresidentCandidate } from './interfaces/class.interface';
+import * as admin from 'firebase-admin';
 
 @Injectable()
 export class ClassPresidentService {
@@ -32,7 +33,13 @@ export class ClassPresidentService {
     await this.firebase.db.collection('class-president-candidates').doc(number).update(update);
     return true;
   }
-
+   // 후보에 투표하면 count를 1 증가시킵니다 (원자적 연산)
+   async voteCandidate(id: string): Promise<void> {
+    await this.firebase.db
+      .collection('class-president-candidates')
+      .doc(id)
+      .update({ count: admin.firestore.FieldValue.increment(1) });
+  }
   // 후보 삭제
   async deletePresident(number:string) {
     await this.firebase.db.collection('class-president-candidates').doc(number).delete();
