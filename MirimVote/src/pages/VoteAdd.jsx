@@ -8,8 +8,6 @@ import { Title, SubTitle } from "../components/VoteTitles";
 import { useEffect, useRef, useState } from 'react';
 import { auth } from '../services/firebase';
 import { onAuthStateChanged } from 'firebase/auth';
-import { auth } from '../services/firebase';
-import { onAuthStateChanged } from 'firebase/auth';
 
 const TitleBtn = styled.button`
     width: 120px;
@@ -112,58 +110,6 @@ const AddCandidate = styled.button`
     border-radius: 10px;
     cursor: pointer;
 `
-const VoteTypeBox = styled.div`
-    border: 1px solid #666666;
-    border-radius: 20px;
-    background-color: #f9f9f9;
-    padding: 32px;
-    margin-bottom: 24px;
-`;
-const Select = styled.select`
-    border: 1px solid #888888;
-    border-radius: 10px;
-    padding: 8px;
-    font-size: 16px;
-    margin-right: 16px;
-`;
-const YearInput = styled.input`
-    border: 1px solid #888888;
-    border-radius: 10px;
-    padding: 8px;
-    font-size: 16px;
-    width: 100px;
-    margin-right: 16px;
-`;
-
-const VoteType = styled.div``
-
-const FlexContainer = styled.div``
-const VoteTypeBox = styled.div`
-    border: 1px solid #666666;
-    border-radius: 20px;
-    background-color: #f9f9f9;
-    padding: 32px;
-    margin-bottom: 24px;
-`;
-const Select = styled.select`
-    border: 1px solid #888888;
-    border-radius: 10px;
-    padding: 8px;
-    font-size: 16px;
-    margin-right: 16px;
-`;
-const YearInput = styled.input`
-    border: 1px solid #888888;
-    border-radius: 10px;
-    padding: 8px;
-    font-size: 16px;
-    width: 100px;
-    margin-right: 16px;
-`;
-
-const VoteType = styled.div``
-
-const FlexContainer = styled.div``
 
 export default function VoteAdd() {
     const [candidates, setCandidates] = useState([{ name: '', isNew: true }]);
@@ -188,7 +134,6 @@ export default function VoteAdd() {
         setCandidates([...candidates, { name: '', isNew: true }]);
     };
 
-    const handleSubmit = async (e) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -345,12 +290,6 @@ export default function VoteAdd() {
                             <AddCandidate type="button" onClick={addName}>후보 추가</AddCandidate>
                         </CandidateBox>
                     </Box>
-                    <VoteManage
-                        isAutoStopEnabled={isAutoStopEnabled}
-                        setIsAutoStopEnabled={setIsAutoStopEnabled}
-                        voterCount={voterCount}
-                        setVoterCount={setVoterCount}
-                    />
                     <VoteManage
                         isAutoStopEnabled={isAutoStopEnabled}
                         setIsAutoStopEnabled={setIsAutoStopEnabled}
