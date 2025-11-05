@@ -12,16 +12,19 @@ import { ClassPresidentService } from './class-president/class-president.service
 import { ClassPresidentController } from './class-president/class-president.controller';
 import { FirebaseService } from './firebase/firebase.service';
 import { FirebaseModule } from './firebase/firebase.module';
+import { ElectionSettingsModule } from './election-settings/election-settings.module';
 
 
 @Module({
   imports: [ServeStaticModule.forRoot({
-    rootPath: join(__dirname, '..', 'static'),
+    rootPath: join(__dirname, '..', 'static','client','dist'), // 정적 파일 경로 설정
+    exclude: ['/api/(.*)'], // API 경로는 제외
   }),
     AuthModule,
     ClassPresidentModule,
     SchoolPresidentModule,
-    FirebaseModule],
+    FirebaseModule,
+    ElectionSettingsModule],
   controllers: [ AuthController, SchoolPresidentController, ClassPresidentController],
   providers: [ AuthService, ClassPresidentService, SchoolPresidentService, FirebaseService],
 })
