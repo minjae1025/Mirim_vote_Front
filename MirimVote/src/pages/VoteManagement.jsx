@@ -171,7 +171,6 @@ export default function VoteManagers() {
                 }
                 setElectionId(currentElectionId);
 
-                // 1. Fetch Election Settings
                 const settingsResponse = await fetch(`http://localhost:3000/settings?electionId=${currentElectionId}`);
                 if (!settingsResponse.ok) {
                     throw new Error(`Failed to fetch settings: ${settingsResponse.status}`);
@@ -290,7 +289,10 @@ export default function VoteManagers() {
                     }
                     const createResponse = await fetch(candidateApiUrl, {
                         method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${idToken}`
+                        },
                         body: JSON.stringify(createBody),
                     });
                     if (!createResponse.ok) throw new Error(`Failed to create candidate: ${createResponse.status}`);
@@ -305,7 +307,10 @@ export default function VoteManagers() {
                     }
                     const updateResponse = await fetch(`${candidateApiUrl}?number=${item.data.number}`, {
                         method: 'PATCH',
-                        headers: { 'Content-Type': 'application/json' },
+                        headers: { 
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${idToken}`
+                        },
                         body: JSON.stringify(updateBody),
                     });
                     if (!updateResponse.ok) throw new Error(`Failed to update candidate: ${updateResponse.status}`);

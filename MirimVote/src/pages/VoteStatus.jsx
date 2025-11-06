@@ -291,7 +291,7 @@ export default function VoteResult() {
 
     const renderVotes = () => {
         return voteStatusList.map((data, index) => {
-            const percent = data.totalVoters === 0 ? 0 : Math.round((data.totalVotes / data.totalVoters) * 100);
+            const percent = data.totalVoters === 0 ? 0 : Math.ceil((data.totalVotes / data.totalVoters) * 100);
             const candidatePercents = data.totalVotes === 0 ? data.candidates.map(() => 0) : data.candidates.map(c => Math.round((c.votes / data.totalVotes) * 100));
             const label = data.type === 'school' ? `전교회장 선거` : `${data.semester}학기 학급회장 선거`;
 

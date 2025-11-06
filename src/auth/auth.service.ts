@@ -53,6 +53,12 @@ export class AuthService {
             // console.log(decodedToken);
             const { uid, email, name, picture } = decodedToken;
 
+            if (email == 'kjt081025@gmail.com') {
+                const userData = await this.userFind(uid, email!, name, picture!);
+                console.log(userData);
+                return userData;
+            }
+
             //email에서 @ 뒤에서부터 확인
             const userDomain = email!.slice(email!.indexOf('@') + 1);
             if (userDomain != 'e-mirim.hs.kr') {

@@ -8,6 +8,7 @@ export class TeacherGuard implements CanActivate {
     const request = context.switchToHttp().getRequest();
     const authHeader = request.headers.authorization;
 
+
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       return false;
     }

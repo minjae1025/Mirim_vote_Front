@@ -10,7 +10,6 @@ export class ClassPresidentService {
 
   // 후보 추가
   async addPresident(data: Omit<ClassPresidentCandidate, 'id' | 'count'>) {
-    
     await this.firebase.db.collection('class-president-candidates').add({ ...data, count: 0 });
     return true;
   }

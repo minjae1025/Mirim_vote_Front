@@ -166,20 +166,46 @@ export default function VoteAdd() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        for (let item of candidates) {
+            if (item.name.trim() == '') {
+                alert("후보자 이름에 공백은 안됩니다.")
+                return;
+            }
+        }
+
         try {
+            const voteData = { year: Number(year) }
+
+            if (voteType == 'class') {
+                voteData.semester = Number(semester);
+                voteData.grade = Number(grade);
+                voteData.classNum = Number(classNum);
+            }
+
+            let electionId = `${voteType[0]}_${voteData.year}`;
+            if (voteType == 'class') {
+                electionId += `${voteData.semester}${voteData.grade}${voteData.classNum}`;
+            }
+
+            const response1 = await fetch(`http://localhost:3000/settings`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${idToken}`
+                },
+                body: JSON.stringify({
+                    electionId: voteData.electionId,
+                    active: false,
+                    voterCount: voterCount,
+                    autoClose: isAutoStopEnabled,
+                })
+            });
+            if (!response1.ok) {
+                alert("이미 생성된 투표입니다.");
+                return;
+            }
+
             for (let item of candidates) {
-                const voteData = {
-                    // candidates,
-                    // isAutoStopEnabled,
-                    // voterCount,
-                    year: Number(year),
-                };
-
-                if (item.name.trim() == '') {
-                    alert("이름이 공백이 존재합니다.")
-                    continue;
-                }
-
                 if (voteType == 'school') {
                     const names = item.name.split(",");
                     voteData.name1 = names[0];
@@ -187,34 +213,7 @@ export default function VoteAdd() {
                 }
                 else {
                     voteData.name = item.name;
-                    voteData.semester = Number(semester);
-                    voteData.grade = Number(grade);
-                    voteData.classNum = Number(classNum);
                 }
-
-                voteData.electionId = `${voteType[0]}_${voteData.year}`;
-                if (voteType == 'class') {
-                    voteData.electionId += `${voteData.semester}${voteData.grade}${voteData.classNum}`;
-                }
-
-                const response1 = await fetch(`http://localhost:3000/settings`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        electionId: voteData.electionId,
-                        active: false,
-                        voterCount: voterCount,
-                        autoClose: isAutoStopEnabled,
-                    })
-                });
-                if (!response1.ok) {
-                    alert("이미 생성된 투표입니다.")
-                    continue;
-                }
-
-                delete voteData.electionId;
 
                 const response2 = await fetch(`http://localhost:3000/apivote${voteType}-president`, {
                     method: 'POST',
@@ -224,8 +223,7 @@ export default function VoteAdd() {
                     },
                     body: JSON.stringify(voteData)
                 });
-                const data2 = await response1.json();
-                console.log(data2);
+                // const data2 = await response1.json();;
 
                 alert("추가 완료!")
                 window.location.href = '/dashboard';
@@ -236,6 +234,10 @@ export default function VoteAdd() {
     };
 
     const handleOptionChange = (index, value) => {
+        if (value.trim() == '') {
+            alert(`${index + 1}번 후보의 이름이 공백입니다. 다시 입력해 주세요.`);
+        }
+
         const newCandidates = [...candidates];
         newCandidates[index] = { ...newCandidates[index], name: value };
         setCandidates(newCandidates);
@@ -288,7 +290,11 @@ export default function VoteAdd() {
                         <Label>투표 종류</Label>
                         <VoteTypeBox>
                             <FlexContainer style={{ gap: '10px' }}>
-                                <Select value={voteType} onChange={e => setVoteType(e.target.value)}><option value="school">전교회장</option><option value="class">학급회장</option></Select><YearInput type="number" value={year} readOnly />
+                                <Select value={voteType} onChange={e => setVoteType(e.target.value)}>
+                                    <option value="school">전교회장</option>
+                                    <option value="class">학급회장</option>
+                                </Select>
+                                <YearInput type="number" value={year} min={2025} />
                                 {voteType === 'class' && (<>
                                     <Select value={semester} onChange={e => setSemester(e.target.value)}>
                                         <option value={1}>1학기</option>
